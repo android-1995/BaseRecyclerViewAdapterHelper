@@ -314,9 +314,14 @@ class QuickAdapterHelper private constructor(
      * 通过 "向前加载"、"向后加载"、主要内容Adapter，构建 [QuickAdapterHelper]
      *
      * @property contentAdapter 展示内容的 Adapter
+     * @property isDefaultTrailLoadEndDisplay 所有数据加载完毕后，是否显示"加载结束"
      * @constructor Create empty Builder
      */
-    class Builder(private val contentAdapter: BaseQuickAdapter<*, *>) {
+    class Builder(
+        private val contentAdapter: BaseQuickAdapter<*, *>,
+        private val isDefaultTrailLoadEndDisplay: Boolean = true
+    ) {
+        constructor(contentAdapter: BaseQuickAdapter<*, *>) : this(contentAdapter, true)
 
         private var leadingLoadStateAdapter: LeadingLoadStateAdapter<*>? = null
         private var trailingLoadStateAdapter: TrailingLoadStateAdapter<*>? = null
@@ -324,7 +329,7 @@ class QuickAdapterHelper private constructor(
         private var config: ConcatAdapter.Config = ConcatAdapter.Config.DEFAULT
 
         private fun getTrailingLoadStateAdapter(): TrailingLoadStateAdapter<*> {
-            return trailingLoadStateAdapter ?: DefaultTrailingLoadStateAdapter().apply {
+            return trailingLoadStateAdapter ?: DefaultTrailingLoadStateAdapter(isDefaultTrailLoadEndDisplay).apply {
                 trailingLoadStateAdapter = this
             }
         }
