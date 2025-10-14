@@ -154,7 +154,7 @@ afterEvaluate {
     }
 
 }
-
+/*
 gradle.taskGraph.whenReady {
     if (allTasks.any { it is Sign }) {
 
@@ -170,3 +170,4 @@ signing {
     sign(publishing.publications)
 }
 
+*/
