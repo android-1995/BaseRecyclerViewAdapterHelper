@@ -12,14 +12,14 @@ import com.chad.library.adapter4.loadState.LoadState
  *
  * 默认实现的尾部"加载更多" Adapter
  */
-internal class DefaultTrailingLoadStateAdapter(isLoadEndDisplay: Boolean = true): TrailingLoadStateAdapter<DefaultTrailingLoadStateAdapter.TrailingLoadStateVH>(isLoadEndDisplay) {
+class DefaultTrailingLoadStateAdapter(isLoadEndDisplay: Boolean = true): TrailingLoadStateAdapter<DefaultTrailingLoadStateAdapter.TrailingLoadStateVH>(isLoadEndDisplay) {
 
     /**
      * Default implementation of "load more" ViewHolder
      *
      * 默认实现的"加载更多" ViewHolder
      */
-    internal class TrailingLoadStateVH(
+    class TrailingLoadStateVH(
         parent: ViewGroup,
         view: View = LayoutInflater.from(parent.context).inflate(R.layout.brvah_trailing_load_more, parent, false)
     ) : RecyclerView.ViewHolder(view) {
