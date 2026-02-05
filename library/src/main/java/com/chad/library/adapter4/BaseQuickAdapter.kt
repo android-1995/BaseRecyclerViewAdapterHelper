@@ -55,10 +55,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         null
 
     private val mDiffer: AsyncListDiffer<T>? =
-        if (config == null)
-            null
-        else
-            AsyncListDiffer(AdapterListUpdateCallback(this), config)
+        config?.let { AsyncListDiffer(AdapterListUpdateCallback(this), it) }
 
 
     private var _recyclerView: RecyclerView? = null
@@ -85,10 +82,9 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
      */
     val recyclerView: RecyclerView
         get() {
-            checkNotNull(_recyclerView) {
+            return checkNotNull(_recyclerView) {
                 "Please get it after onAttachedToRecyclerView()"
             }
-            return _recyclerView!!
         }
 
     val context: Context
@@ -703,7 +699,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         } else {
             // Diff的逻辑
             mDiffer.currentList.toMutableList().also {
-                it.add(data)
+                it.add(position, data)
                 mDiffer.submitList(it, commitCallback)
             }
         }
@@ -874,9 +870,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
         }
 
         if (mDiffer == null) {
-            for (it in last downTo range.first) {
-                mutableItems.removeAt(it)
-            }
+            mutableItems.subList(range.first, last + 1).clear()
 
             notifyItemRangeRemoved(range.first, last - range.first + 1)
 
@@ -888,9 +882,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
             commitCallback?.run()
         } else {
             val list = mDiffer.currentList.toMutableList()
-            for (it in last downTo  range.first) {
-                list.removeAt(it)
-            }
+            list.subList(range.first, last + 1).clear()
             mDiffer.submitList(list, commitCallback)
         }
     }
@@ -914,7 +906,7 @@ abstract class BaseQuickAdapter<T : Any, VH : RecyclerView.ViewHolder>(
             }
         } else {
             val list = mDiffer.currentList
-            if (fromPosition in list.indices || toPosition in list.indices) {
+            if (fromPosition in list.indices && toPosition in list.indices) {
                 list.toMutableList().also {
                     Collections.swap(it, fromPosition, toPosition)
                     mDiffer.submitList(it, commitCallback)
