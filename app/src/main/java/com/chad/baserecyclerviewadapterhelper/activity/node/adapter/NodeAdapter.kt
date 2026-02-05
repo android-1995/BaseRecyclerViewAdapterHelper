@@ -52,24 +52,16 @@ class NodeAdapter : BaseNodeAdapter() {
     }
 
     override fun isSameNode(item1: Any, item2: Any): Boolean {
-        return when (item1) {
-            is NodeEntity if item2 is NodeEntity -> {
-                item1.title == item2.title
-            }
-
-            is NodeEntity.Level2NodeEntity if item2 is NodeEntity.Level2NodeEntity -> {
-                // 二级
-                item1.title == item2.title
-            }
-
-            is NodeEntity.Level2NodeEntity.Level3NodeEntity if item2 is NodeEntity.Level2NodeEntity.Level3NodeEntity -> {
-                // 三级
-                item1.title == item2.title
-            }
-
-            else -> {
-                false
-            }
+        return if (item1 is NodeEntity && item2 is NodeEntity) {
+            item1.title == item2.title
+        } else if (item1 is NodeEntity.Level2NodeEntity && item2 is NodeEntity.Level2NodeEntity) {
+            // 二级
+            item1.title == item2.title
+        } else if (item1 is NodeEntity.Level2NodeEntity.Level3NodeEntity && item2 is NodeEntity.Level2NodeEntity.Level3NodeEntity) {
+            // 三级
+            item1.title == item2.title
+        } else {
+            false
         }
     }
 
